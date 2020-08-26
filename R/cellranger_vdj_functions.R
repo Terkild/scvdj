@@ -2,8 +2,13 @@
 #'
 #'
 #' @param path	Path to CellRanger output (root folder, not "outs")
+#' @param consensus Boolean if contigs assigned to consensus sequences should use the consensus annotation
+#' @param annotation_file Which contig_annotation file to use ("all" versus "filtered")
+#' @param consensus_file  which consensus_annotation file to use
 #' @param ...	Passes variables on to ConsensusMerge
 #'
+#' @return data.frame containing contig annotations
+#' @export
 
 cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="filtered_contig_annotations.csv", consensus_file="consensus_annotations.csv", ...){
 
@@ -27,9 +32,13 @@ cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="filtered_
 #' Filter Cell Ranger VDJ
 #'
 #' Filter by boolean columns
+#'
+#' @param contig_annotations  data.frame containing contig_annotations
+#' @param filterTrue  vector of which "Boolean columns" in cellranger contig_annotation should be true ("full_length", "high_confidence", "productive")
+#' @param min.umis  integer threshold for minimum UMI count required to be kept
 
 cellranger_vdj_filter <- function(contig_annotations, filterTrue=c("full_length","high_confidence"), min.umis=0){
-  contig_annotations %>% filter_at(all_of(filterTrue), all_vars(. == "True")) %>% filter(umis > min.umis)
+  contig_annotations %>% filter_at(all_of(filterTrue), all_vars(. == "True")) %>% filter(umis >= min.umis)
 }
 
 #' Order Cell Ranger VDJ calls
