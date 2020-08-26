@@ -1,2 +1,2 @@
 # scvdj
-Package for analyzing VDJ (T-/B-cell receptor) clones in single-cell data
+Package for analyzing and visualizing single-cell VDJ (T- and B-cell receptor) clones
