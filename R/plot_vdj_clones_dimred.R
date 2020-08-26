@@ -1,6 +1,17 @@
 #' Plot VDJ clones on DimPlot
 #'
+#' @param object Seurat object
+#' @param chain TCR/BCR chain to be plotted
+#' @param reduction DimReduction to use from Seurat object
+#' @param colors  Vector of colors to use for individual clonotypes
+#'
+#' @import ggplot2
+#' @importFrom Seurat FetchData
 #' @return ggplot object
+#' @export
+#'
+
+# Redo function to be Seurat independent and make wrapper function for seurat
 plot_vdj_clones_dimred <- function(object, chain="TCRab_TRB", reduction="tsne", colors=NULL){
   red.key <- object@reductions[[reduction]]@key
   red.dims <- paste0(red.key,c(1,2))
@@ -9,6 +20,7 @@ plot_vdj_clones_dimred <- function(object, chain="TCRab_TRB", reduction="tsne", 
 
   object[[paste0(chain,'.clone')]][object[[paste0(chain,'.bool')]] == 0] <- NA
 
+  # SampleName is hardcoded allow additional meta data in plotData to allow facetting the plot
   plotData <- FetchData(object, vars=c(red.dims,paste0(chain,".clone"),"sampleName"))
   colnames(plotData)[1:3] <- c("dim1","dim2","clone")
 

@@ -1,11 +1,11 @@
 #' Load Cell Ranger VDJ
 #'
 #'
-#' @param path	Path to CellRanger output (root folder, not "outs")
+#' @param path	Path to Cell Ranger output (root folder, not "outs" folder)
 #' @param consensus Boolean if contigs assigned to consensus sequences should use the consensus annotation
-#' @param annotation_file Which contig_annotation file to use ("all" versus "filtered")
-#' @param consensus_file  which consensus_annotation file to use
-#' @param ...	Passes variables on to ConsensusMerge
+#' @param annotation_file contig_annotation file to use ("all" versus "filtered")
+#' @param consensus_file  consensus_annotation file to use
+#' @param ...	Passes variables on to \code{\link{consensus_merge}}
 #'
 #' @return data.frame containing contig annotations
 #' @export
@@ -33,9 +33,13 @@ cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="filtered_
 #'
 #' Filter by boolean columns
 #'
-#' @param contig_annotations  data.frame containing contig_annotations
-#' @param filterTrue  vector of which "Boolean columns" in cellranger contig_annotation should be true ("full_length", "high_confidence", "productive")
-#' @param min.umis  integer threshold for minimum UMI count required to be kept
+#' @param contig_annotations  Dataframe containing contig_annotations
+#' @param filterTrue  Vector of which "Boolean columns" in cellranger contig_annotation should be true ("full_length", "high_confidence", "productive")
+#' @param min.umis  Integer threshold for minimum UMI count required to be kept
+#'
+#' @importFrom dplyr filter_at all_of all_vars filter
+#' @return data.frame containing contig annotations
+#' @export
 
 cellranger_vdj_filter <- function(contig_annotations, filterTrue=c("full_length","high_confidence"), min.umis=0){
   contig_annotations %>% filter_at(all_of(filterTrue), all_vars(. == "True")) %>% filter(umis >= min.umis)
@@ -45,6 +49,12 @@ cellranger_vdj_filter <- function(contig_annotations, filterTrue=c("full_length"
 #'
 #' To determine which contigs are most likely to be "primary" (~expressed) loci
 #'
+#' @param contig_annotations  Dataframe containing contig_annotations
+#'
+#' @importFrom dplyr group_by arrange desc mutate
+#' @return data.frame containing contig annotations
+#' @export
+
 cellranger_vdj_order <- function(contig_annotations){
   ## Make an order variable determined by being having functional rearranged CDR3, most UMIs or most reads
   alignments.byCell.byV.clonotypes <- contig_annotations %>%
@@ -60,6 +70,11 @@ cellranger_vdj_order <- function(contig_annotations){
 #' Parse cellranger contigs contig_annotation table to call VDJ on a per
 #' cell-barcode basis
 #'
+#' @param contig_annotations  Dataframe containing contig_annotations
+#'
+#' @importFrom dplyr group_by summarize
+#' @return data.frame containing contig annotations
+#' @export
 
 cellranger_vdj_parse_by_cell <- function(contig_annotations){
 

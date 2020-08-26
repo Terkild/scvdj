@@ -1,6 +1,20 @@
 #' Add VDJ info to Seurat object
 #'
+#' Adds parsed contig by cell dataframe into metadata of a Seurat object
 #'
+#' @param object  Seurat object
+#' @param VDJ Parsed VDJ contig by cell data.frame
+#' @param column.CB Name of column that contains cell barcode
+#' @param prefix  Prefix given to each metadata column
+#' @param colums.include  Columns from parsed contig by cell data.frame to be included in Seurat metadata
+#' @param chains  Vector of chains (TRA, TRB, TRG, TRD, IGH, IHK, IGL) to include from parsed contig by cell data.frame
+#' @param create.boolean  Should a boolean of whether a given cell has any expression of a given chain be included
+#' @param boolean.suffix  Suffix for boolean (default structure is CHAIN.bool)
+#' @param boolean.filterFunctional Should boolean only consider "functional" VDJ counts
+#'
+#' @return Seurat object
+#' @importFrom Seurat AddMetaData
+#' @export
 
 seurat_vdj_add_to_meta <- function(object, VDJ, column.CB="CB", prefix="VDJ_", columns.include=c("clonotype.1","clonotype.2","clonotype.other","CDR3.1","CDR3.2","CDR3.other","V.1","V.2","V.other","D.1","D.2","D.other","J.1","J.2","J.other","C.1","C.2","C.other","UMIcount.1","UMIcount.2","UMIcount.other","reads.1","reads.2","reads.other"), chains=NULL, create.boolean=TRUE, boolean.suffix=".bool", boolean.filterFunctional=FALSE){
 
