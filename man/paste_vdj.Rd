@@ -6,6 +6,14 @@
 \usage{
 paste_vdj(x, sep = ":")
 }
+\arguments{
+\item{x}{vector of values}
+
+\item{sep}{seperator in concatenated string}
+}
+\value{
+Concatenated string where empty values have been removed
+}
 \description{
-Paste values of multiple columns into a single string
+Concatenate values of multiple columns into a single string after removing empty values by \code{no_empty}
 }

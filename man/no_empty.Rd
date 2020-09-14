@@ -6,6 +6,14 @@
 \usage{
 no_empty(x, empty.values = c("", "None"))
 }
+\arguments{
+\item{x}{Input vector}
+
+\item{empty.values}{Vector of values considered "empty"}
+}
+\value{
+Vector where empty values have been removed
+}
 \description{
 Considered empty if equal to "" or "None"
 }

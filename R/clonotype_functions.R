@@ -32,7 +32,7 @@ clonotype_top <- function(clonotypes, clonotypes_max=10, cells_min=1, nonclonal_
     top_n(clonotypes_max)
 
   clonotypes <- data.frame(clonotypes=clonotypes) %>%
-    left_join(clones) %>%$clone
+    left_join(clones) %>%
     mutate(clone=ifelse(is.na(num_cells),nonclonal_name,clonotypes))
 
   return(clonotypes$clone)
