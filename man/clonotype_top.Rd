@@ -21,6 +21,9 @@ clonotype_top(
 
 \item{...}{Passed on to clonotype_filter}
 }
+\value{
+Returns a vector of same length as input clonotypes with filtered clonotype assignments
+}
 \description{
 Filter top clonotypes by rank
 }

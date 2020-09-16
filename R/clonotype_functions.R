@@ -24,6 +24,10 @@ clonotype_filter <- function(clonotypes, cells_min=5, nonclonal_name="Polyclonal
 #' @param clonotypes_max Max number of clonotypes to return
 #' @param cells_min Integer of number of cells required to be considered a clone
 #' @param ... Passed on to clonotype_filter
+#'
+#' @return Returns a vector of same length as input clonotypes with filtered clonotype assignments
+#' @import dplyr
+#' @export
 
 clonotype_top <- function(clonotypes, clonotypes_max=10, cells_min=1, nonclonal_name="Polyclonal", ...){
   clones <- data.frame(clonotypes=clonotype_filter(clonotypes, cells_min=cells_min, ...)) %>%
