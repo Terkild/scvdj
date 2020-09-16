@@ -12,10 +12,10 @@
 
 cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="filtered_contig_annotations.csv", consensus_file="consensus_annotations.csv", ...){
 
-  data.annotation <- read.csv(file.path(path,"outs",annotation_file), sep=",", header=TRUE)
+  data.annotation <- read.csv(file.path(path,annotation_file), sep=",", header=TRUE)
 
   if(consensus == TRUE){
-    data.consensus <- read.csv(file.path(path,"outs",consensus_file), sep=",", header=TRUE)
+    data.consensus <- read.csv(file.path(path,consensus_file), sep=",", header=TRUE)
 
     vdj <- consensus_merge(data.annotation, data.consensus, ...)
 
