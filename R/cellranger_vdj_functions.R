@@ -10,7 +10,7 @@
 #' @return data.frame containing contig annotations
 #' @export
 
-cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="filtered_contig_annotations.csv", consensus_file="consensus_annotations.csv", ...){
+cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="outs/filtered_contig_annotations.csv", consensus_file="outs/consensus_annotations.csv", ...){
 
   data.annotation <- read.csv(file.path(path,annotation_file), sep=",", header=TRUE)
 
