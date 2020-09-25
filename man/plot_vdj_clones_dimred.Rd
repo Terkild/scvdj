@@ -9,18 +9,12 @@ plot_vdj_clones_dimred(
   y,
   clone,
   clone_colors = c(),
+  red.dims = c("dim1", "dim2"),
   polyclonal_label = "Polyclonal",
   polyclonal_color = "#6666FF",
   clone_size = 2,
   polyclonal_size = 0.75
 )
-}
-\arguments{
-\item{chain}{TCR/BCR chain to be plotted}
-
-\item{reduction}{DimReduction to use from Seurat object}
-
-\item{colors}{Vector of colors to use for individual clonotypes}
 }
 \value{
 ggplot object
