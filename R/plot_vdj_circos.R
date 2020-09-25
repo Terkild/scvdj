@@ -27,7 +27,7 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
     summarize(Freq=n())
 
   clone_colors2 <- paste0(clone_colors,clone_opacity)
-  names(clone.colors2) <- names(clone_colors)
+  names(clone_colors2) <- names(clone_colors)
   clone_colors2[polyclonal_label] <- polyclonal_color
   col <- clone_colors2[data$clone]
 
@@ -71,7 +71,7 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
 #' @export
 #' @importFrom Seurat FetchData
 
-plot_vdj_circos_seurat <- function(object, Vsegment, Jsegment, Dsegment=NULL, clone=c(), cells=c(), ...){
+plot_vdj_circos_seurat <- function(object, Vsegment, Jsegment, Dsegment=NULL, clone, cells=c(), ...){
 
   data <- Seurat::FetchData(object, vars=c(Vsegment, Jsegment, clone))
   colnames(data) <- c("V","J","clone")
