@@ -16,7 +16,7 @@
 #' @import circlize
 #' @import dplyr
 
-plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal_color="#00000020", start_degree=270, clone_opacity=80, clone_colors, link_lwd=0.25){
+plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal_color="#00000020", start_degree=270, clone_opacity=80, clone_colors, link_lwd=0.25, label_threshold=2){
 
   data <- data.frame(clone=clone,
                      V=gsub("^(IG[LKH])|^(TR[ABGD])","",Vsegment),
@@ -50,7 +50,7 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
   circos.track(track.index = 1, panel.fun = function(x, y) {
     xplot = get.cell.meta.data("xplot")
 
-    if(abs(xplot[2] - xplot[1]) > label.threshold) {
+    if(abs(xplot[2] - xplot[1]) > label_threshold) {
       circos.text(CELL_META$xcenter, CELL_META$ylim[1], CELL_META$sector.index,
                   facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5))
     }
