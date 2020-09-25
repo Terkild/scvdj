@@ -7,8 +7,8 @@
 cellranger_vdj_load(
   path,
   consensus = TRUE,
-  annotation_file = "filtered_contig_annotations.csv",
-  consensus_file = "consensus_annotations.csv",
+  annotation_file = "outs/filtered_contig_annotations.csv",
+  consensus_file = "outs/consensus_annotations.csv",
   ...
 )
 }
