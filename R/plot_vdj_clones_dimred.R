@@ -1,40 +1,51 @@
-#' Plot VDJ clones on DimPlot
+#' Plot VDJ clones on DimPlot seurat
 #'
 #' @param object Seurat object
+#'
+#' @return ggplot object
+#' @export
+#' @importFrom Seurat FetchData
+
+plot_vdj_clones_dimred_seurat <- function(object, clone, reduction="umap", ...){
+  red.key <- object@reductions[[reduction]]@key
+  red.dims <- paste0(red.key,c(1,2))
+
+  data <- Seurat::FetchData(object, c(clone, red.dims))
+
+  colnames(data) <- c("clone", "dim1", "dim2")
+
+  return(plot_vdj_clones_dimred(x=data$dim1, y=data$dim2, clone=data$clone,...))
+}
+
+
+#' Plot VDJ clones on DimPlot
+#'
 #' @param chain TCR/BCR chain to be plotted
 #' @param reduction DimReduction to use from Seurat object
 #' @param colors  Vector of colors to use for individual clonotypes
 #'
 #' @import ggplot2
-#' @importFrom Seurat FetchData
+
 #' @return ggplot object
 #' @export
 #'
 
 # Redo function to be Seurat independent and make wrapper function for seurat
-plot_vdj_clones_dimred <- function(object, chain="TCRab_TRB", reduction="tsne", colors=NULL){
-  red.key <- object@reductions[[reduction]]@key
-  red.dims <- paste0(red.key,c(1,2))
+plot_vdj_clones_dimred <- function(x, y, clone, clone_colors=c(), polyclonal_label="Polyclonal", polyclonal_color="#6666FF", clone_size=2, polyclonal_size=0.75){
 
-  object[[paste0(chain,'.clone')]] <- ifelse(as.vector(object[[paste0(chain,'.CDR3.1')]][,1]) %in% names(colors), as.vector(object[[paste0(chain,'.CDR3.1')]][,1]), "Polyclonal")
 
-  object[[paste0(chain,'.clone')]][object[[paste0(chain,'.bool')]] == 0] <- NA
-
-  # SampleName is hardcoded allow additional meta data in plotData to allow facetting the plot
-  plotData <- FetchData(object, vars=c(red.dims,paste0(chain,".clone"),"sampleName"))
-  colnames(plotData)[1:3] <- c("dim1","dim2","clone")
-
-  p <- ggplot(plotData, aes(x=dim1, y=dim2)) +
-    geom_point(color="lightgrey", size=0.75) +
-    geom_point(data=plotData[which(plotData$clone == "Polyclonal"),], color="#6666FF", size=0.75) +
-    geom_point(data=plotData[-which(plotData$clone %in% c(NA,"Polyclonal")),],
+  p <- ggplot(plotData, aes(x=x, y=y)) +
+    geom_point(color="lightgrey", size=polyclonal_size) +
+    geom_point(data=plotData[which(plotData$clone == polyclonal_label),], color=polyclonal_color, size=polyclonal_size) +
+    geom_point(data=plotData[-which(plotData$clone %in% c(NA,polyclonal_label)),],
                pch=21, color="black", aes(fill=clone)) +
-    guides(fill=guide_legend(ncol=1, override.aes=list(size=2))) +
+    guides(fill=guide_legend(ncol=1, override.aes=list(size=clone_size))) +
     labs(title=chain, x=red.dims[1], y=red.dims[2]) +
     theme(legend.text=element_text(size=6),
           legend.key.height=unit(2,"mm"),
           plot.background=element_blank())
 
-  if(!is.null(colors)) p <- p + scale_fill_manual(values=colors)
+  if(length(clone_colors) >= length(unique(clone))) p <- p + scale_fill_manual(values=clone_colors)
+
   return(p)
 }

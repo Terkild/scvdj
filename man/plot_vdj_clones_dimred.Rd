@@ -5,15 +5,17 @@
 \title{Plot VDJ clones on DimPlot}
 \usage{
 plot_vdj_clones_dimred(
-  object,
-  chain = "TCRab_TRB",
-  reduction = "tsne",
-  colors = NULL
+  x,
+  y,
+  clone,
+  clone_colors = c(),
+  polyclonal_label = "Polyclonal",
+  polyclonal_color = "#6666FF",
+  clone_size = 2,
+  polyclonal_size = 0.75
 )
 }
 \arguments{
-\item{object}{Seurat object}
-
 \item{chain}{TCR/BCR chain to be plotted}
 
 \item{reduction}{DimReduction to use from Seurat object}

@@ -9,7 +9,7 @@ plot_vdj_circos_seurat(
   Vsegment,
   Jsegment,
   Dsegment = NULL,
-  clone = c(),
+  clone,
   cells = c(),
   ...
 )

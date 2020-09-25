@@ -10,11 +10,12 @@ plot_vdj_circos(
   Dsegment = c(),
   clone = c(),
   polyclonal_label = "Polyclonal",
-  polyclonal.color = "#00000020",
+  polyclonal_color = "#00000020",
   start_degree = 270,
   clone_opacity = 80,
   clone_colors,
-  link_lwd = 0.25
+  link_lwd = 0.25,
+  label_threshold = 2
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_vdj_circos(
 
 \item{polyclonal_label}{What label is used to tag polyclonal (within clone vector)}
 
+\item{polyclonal_color}{Color for polyclonal connections}
+
 \item{start_degree}{Where on the circle should the first segment start}
 
 \item{clone_opacity}{Opacity of clonal connections}
@@ -35,8 +38,6 @@ plot_vdj_circos(
 \item{clone_colors}{Named vector of colors (names corresponds to values in clone vector)}
 
 \item{link_lwd}{Line width of connections}
-
-\item{polyclonal_color}{Color for polyclonal connections}
 }
 \description{
 Circos plot of V and J segments
