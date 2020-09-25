@@ -16,7 +16,7 @@
 #' @import circlize
 #' @import dplyr
 
-plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal.color="#00000020", start_degree=270, clone_opacity=80, clone_colors, link_lwd=0.25){
+plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal_color="#00000020", start_degree=270, clone_opacity=80, clone_colors, link_lwd=0.25){
 
   data <- data.frame(clone=clone,
                      V=gsub("^(IG[LKH])|^(TR[ABGD])","",Vsegment),
