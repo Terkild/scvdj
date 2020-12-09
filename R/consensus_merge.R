@@ -16,6 +16,8 @@ consensus_merge <- function(data_annotation, data_consensus, mutual_columns=c("l
 	## Determine which columns can be inherited from consensus annotation
 	use.consensusColumns <- setdiff(intersect(colnames(data_consensus),colnames(data_annotation)),mutual_columns)
 
+	data_annotation$raw_consensus_id <- gsub("consensus([0-9]+)$", "consensus_\\1", data_annotation$raw_consensus_id)
+
 	## Replace contig annotation with consensus annotation for contigs assigned to a consensus
 	vdj.consensus <- data_annotation %>%
 		filter(raw_consensus_id != "None") %>%
