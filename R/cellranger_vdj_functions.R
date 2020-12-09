@@ -42,7 +42,7 @@ cellranger_vdj_load <- function(path, consensus=TRUE, annotation_file="outs/filt
 #' @export
 
 cellranger_vdj_filter <- function(contig_annotations, filterTrue=c("full_length","high_confidence"), min.umis=0){
-  contig_annotations %>% filter_at(all_of(filterTrue), all_vars(. == "True")) %>% filter(umis >= min.umis)
+  contig_annotations %>% filter_at(all_of(filterTrue), all_vars(. == "true")) %>% filter(umis >= min.umis)
 }
 
 #' Order Cell Ranger VDJ calls
