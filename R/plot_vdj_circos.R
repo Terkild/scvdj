@@ -26,16 +26,15 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
     group_by(clone, V, J) %>%
     summarize(Freq=n())
 
+  data <- data %>% arrange(desc(Freq))
+  data <- data %>% filter(!is.na(V))
+
   clone_colors2 <- paste0(clone_colors,clone_opacity)
   names(clone_colors2) <- names(clone_colors)
   clone_colors2[polyclonal_label] <- polyclonal_color
   col <- clone_colors2[data$clone]
 
   border <- ifelse(data$clone != polyclonal_label, 1, NA)
-
-
-  data <- data %>% arrange(desc(Freq))
-  data <- data %>% filter(!is.na(V))
 
   Jsegment.order <- data %>% group_by(J) %>% summarize(count=sum(Freq)) %>% arrange(count)
   Vsegment.order <- data %>% group_by(V) %>% summarize(count=sum(Freq)) %>% arrange(count)
@@ -62,9 +61,9 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
 #'
 #'
 #' @param object  Seurat object
-#' @param Vsegment  Vector of V segment assignment
-#' @param Jsegment  Vector of J segment assignment
-#' @param Dsegment  Vector of D segment assignment (not currently implemented)
+#' @param Vsegment  Name of V segment assignment meta.data column
+#' @param Jsegment  Name of J segment assignment meta.data column
+#' @param Dsegment  Name of D segment assignment meta.data column (not currently implemented)
 #' @param clone Vector of clone assignment
 #' @param cells Which cells should be included
 #'
@@ -79,4 +78,19 @@ plot_vdj_circos_seurat <- function(object, Vsegment, Jsegment, Dsegment=NULL, cl
   if(length(cells)>0) data <- data[cells, ]
 
   return(plot_vdj_circos(Vsegment=data$V, Jsegment=data$J, clone=data$clone, ...))
+}
+
+#' Make circos plot into grob
+#'
+#' A bit of a hack until I find a better way. This allows circos plots to be included in patchwork/plot_grid panels.
+#'
+#' @param plot_FUN The full circos plot function call
+#'
+#' @export
+#' @importFrom cowplot as_grob
+
+circos_grob <- function(plot_FUN){
+  plot <- function() {plot_FUN}
+
+  cowplot::as_grob(plot)
 }
