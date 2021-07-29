@@ -30,14 +30,18 @@ clonotype_filter <- function(clonotypes, cells_min=5, nonclonal_name="Polyclonal
 #' @export
 
 clonotype_top <- function(clonotypes, clonotypes_max=10, cells_min=1, nonclonal_name="Polyclonal", ...){
-  clones <- data.frame(clonotypes=clonotype_filter(clonotypes, cells_min=cells_min, ...)) %>%
+  clones <- data.frame(clonotypes=clonotype_filter(clonotypes, cells_min=cells_min, nonclonal_name=nonclonal_name, ...))
+
+  clones_top <- clones %>%
     filter(clonotypes != nonclonal_name) %>%
     group_by(clonotypes) %>% summarize(num_cells=n()) %>%
     top_n(clonotypes_max)
 
   clonotypes <- data.frame(clonotypes=clonotypes) %>%
-    left_join(clones) %>%
+    left_join(clones_top) %>%
     mutate(clone=ifelse(is.na(num_cells),nonclonal_name,clonotypes))
+
+  clonotypes$clone[is.na(clones)] <- NA
 
   return(clonotypes$clone)
 }
