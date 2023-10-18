@@ -16,11 +16,11 @@
 #' @import circlize
 #' @import dplyr
 
-plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal_color="#00000020", start_degree=270, clone_opacity=80, clone_colors, link_lwd=0.25, label_threshold=2){
+plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclonal_label="Polyclonal", polyclonal_color="#00000020", start_degree=270, clone_opacity=0.8, clone_colors, link_lwd=0.25, label_threshold=2, remove_chain_pattern="^(IG[LKH])|^(TR[ABGD])"){
 
   data <- data.frame(clone=clone,
-                     V=gsub("^(IG[LKH])|^(TR[ABGD])","",Vsegment),
-                     J=gsub("^(IG[LKH])|^(TR[ABGD])","",Jsegment))
+                     V=gsub(remove_chain_pattern,"",Vsegment),
+                     J=gsub(remove_chain_pattern,"",Jsegment))
 
   data <- data %>%
     group_by(clone, V, J) %>%
@@ -29,23 +29,26 @@ plot_vdj_circos <- function(Vsegment, Jsegment, Dsegment=c(), clone=c(), polyclo
   data <- data %>% arrange(desc(Freq))
   data <- data %>% filter(!is.na(V))
 
-  clone_colors2 <- paste0(clone_colors,clone_opacity)
+  clone_colors2 <- alpha(clone_colors,clone_opacity)
   names(clone_colors2) <- names(clone_colors)
   clone_colors2[polyclonal_label] <- polyclonal_color
   col <- clone_colors2[data$clone]
 
   border <- ifelse(data$clone != polyclonal_label, 1, NA)
 
+  grid.col <- append(unique(data$V) %>% sort() %>% setNames(viridis::cividis(length(.)), .),
+                     unique(data$J) %>% sort() %>% setNames(viridis::magma(length(.)), .))
+
   Jsegment.order <- data %>% group_by(J) %>% summarize(count=sum(Freq)) %>% arrange(count)
   Vsegment.order <- data %>% group_by(V) %>% summarize(count=sum(Freq)) %>% arrange(count)
-
-
 
   circos.clear()
   circos.par(start.degree=start_degree)
 
-  chordDiagram(data[,c(2:4)], col=col, link.border=border, link.lwd=link_lwd, annotationTrack="grid", preAllocateTracks=list(track.height=max(strwidth(unlist(dimnames(data))))), order=union(Vsegment.order[[1]],Jsegment.order[[1]]), link.largest.ontop=TRUE)
-
+  chordDiagram(data[,c(2:4)], col=col, grid.col=grid.col, link.border=border, link.lwd=link_lwd,
+               annotationTrack="grid", preAllocateTracks=list(track.height=max(strwidth(unlist(dimnames(data))))),
+               #order=union(Vsegment.order[[1]],Jsegment.order[[1]]),
+               link.largest.ontop=TRUE)
   circos.track(track.index = 1, panel.fun = function(x, y) {
     xplot = get.cell.meta.data("xplot")
 
